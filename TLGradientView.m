@@ -90,6 +90,7 @@
 
 - (void)dealloc;
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self.activeFillGradient release];
 	[self.inactiveFillGradient release];
 	[self.clickedGradient release];
@@ -100,7 +101,11 @@
 - (void)viewWillMoveToSuperview:(NSView *)superview;
 {
 	[super viewWillMoveToSuperview:superview];
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidResignKeyNotification object:[self window]];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:[self window]];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidBecomeActiveNotification object:[self window]];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidResignActiveNotification object:[self window]];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(display) name:NSWindowDidResignKeyNotification object:[superview window]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(display) name:NSWindowDidBecomeKeyNotification object:[superview window]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(display) name:NSApplicationDidBecomeActiveNotification object:NSApp];
@@ -143,7 +148,7 @@
 			[border stroke];			
 		}
 	}
-
+	
 }
 
 @end
