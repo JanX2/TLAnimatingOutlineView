@@ -29,6 +29,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+enum {
+	TLCollapsibleViewExpansionAnimation = 1 << 0,
+	TLCollapsibleViewCollapseAnimation = 1 << 1
+};
+typedef NSUInteger TLCollapsibleViewAnimationType;
+
 @protocol TLCollapsibleDetailView;
 @class TLDisclosureBar;
 @interface TLCollapsibleView : NSView <NSCoding> {
@@ -46,13 +52,16 @@
 @property(readonly) BOOL expanded;
 @property(readonly,assign) NSRect targetFrame;
 @property(readwrite,assign) BOOL animating;
+
+// the following two dictionaries contain entries for the keys below.
+extern NSString *TLCollapsibleViewAnimationTypeKey; // an NSNumber TLCollapsibleViewAnimationType
+extern NSString *TLCollapsibleViewAnimationInfoKey; // an NSDictionary the animation info for the TLCollapsibleView
+extern NSString *TLCollapsibleViewDetailViewAnimationInfoKey; // an NSDictionary the animation info for the detailView
 @property(readonly) NSDictionary *expandAnimationInfo;
 @property(readonly) NSDictionary *collapseAnimationInfo;
 
 - (id)initWithFrame:(NSRect)frame detailView:(NSView <TLCollapsibleDetailView> *)detailView expanded:(BOOL)expanded;
-
 - (void)expand;
-
 - (void)collapse;
 @end
 

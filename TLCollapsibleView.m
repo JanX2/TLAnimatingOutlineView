@@ -32,6 +32,10 @@
 #import "TLDisclosureBar.h"
 #import "TLAnimatingOutlineView.h"
 
+NSString *TLCollapsibleViewAnimationTypeKey = @"TLCollapsibleViewAnimationTypeKey";
+NSString *TLCollapsibleViewAnimationInfoKey = @"TLCollapsibleViewAnimationInfoKey";
+NSString *TLCollapsibleViewDetailViewAnimationInfoKey = @"TLCollapsibleViewDetailViewAnimationInfoKey";
+
 @interface TLCollapsibleView ()
 @property(readwrite,retain) TLDisclosureBar *disclosureBar;
 @property(readwrite,assign) NSRect targetFrame;
@@ -73,7 +77,7 @@
 	newViewFrame.size.height = NSHeight([self.disclosureBar frame]) + NSHeight([self.detailView frame]);
 	NSDictionary *viewAnimationInfo = [NSDictionary dictionaryWithObjectsAndKeys:self,NSViewAnimationTargetKey,[NSValue valueWithRect:[self frame]],NSViewAnimationStartFrameKey,[NSValue valueWithRect:newViewFrame],NSViewAnimationEndFrameKey,nil];
 	
-	return [NSDictionary dictionaryWithObjectsAndKeys:detailViewAnimationInfo,@"detailViewAnimationInfo",viewAnimationInfo,@"viewAnimationInfo",nil];	
+	return [NSDictionary dictionaryWithObjectsAndKeys:detailViewAnimationInfo,TLCollapsibleViewDetailViewAnimationInfoKey,viewAnimationInfo,TLCollapsibleViewAnimationInfoKey,[NSNumber numberWithUnsignedInt:TLCollapsibleViewExpansionAnimation],TLCollapsibleViewAnimationTypeKey,nil];	
 }
 
 - (NSDictionary *)_collapseAnimationInfo;
@@ -86,7 +90,7 @@
 	newViewFrame.size.height = NSHeight([self.disclosureBar frame]);
 	NSDictionary *viewAnimationInfo = [NSDictionary dictionaryWithObjectsAndKeys:self,NSViewAnimationTargetKey,[NSValue valueWithRect:[self frame]],NSViewAnimationStartFrameKey,[NSValue valueWithRect:newViewFrame],NSViewAnimationEndFrameKey,nil];
 	
-	return [NSDictionary dictionaryWithObjectsAndKeys:detailViewAnimationInfo,@"detailViewAnimationInfo",viewAnimationInfo,@"viewAnimationInfo",nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:detailViewAnimationInfo,TLCollapsibleViewDetailViewAnimationInfoKey,viewAnimationInfo,TLCollapsibleViewAnimationInfoKey,[NSNumber numberWithUnsignedInt:TLCollapsibleViewCollapseAnimation],TLCollapsibleViewAnimationTypeKey,nil];
 }
 
 @end
@@ -117,8 +121,7 @@
 	disclosureBarFrame.size.height = 21.0f;
 	disclosureBarFrame.origin.y = 0.0f;
 	self.disclosureBar = [[[TLDisclosureBar alloc] initWithFrame:disclosureBarFrame expanded:expanded] autorelease];
-	[self.disclosureBar setAutoresizingMask:NSViewWidthSizable];
-
+	
 	NSRect detailViewFrame = [detailView frame];
 	detailViewFrame.size.width = NSWidth(frame);
 	detailViewFrame.origin.y = expanded ? NSMaxY(disclosureBarFrame) : NSMaxY(disclosureBarFrame) - NSHeight(detailViewFrame);
@@ -135,7 +138,7 @@
 	
 	[[self.disclosureBar disclosureButton] setAction:@selector(toggleExpansionState:)];
 	[[self.disclosureBar disclosureButton] setTarget:self];
-		
+	
     return self;
 }
 
@@ -191,7 +194,7 @@
 {
 	if (self.expanded)
 		return;
-		
+	
 	if ([self.detailView respondsToSelector:@selector(canExpand)]) {
 		if (![self.detailView canExpand])
 			return;
@@ -199,7 +202,7 @@
 	
 	if ([self.detailView respondsToSelector:@selector(viewWillExpand)])
 		[self.detailView viewWillExpand];
-				
+	
 	self.expandAnimation = [[[NSViewAnimation alloc] initWithViewAnimations:[[self _expandAnimationInfo] allValues]] autorelease];
 	[self.expandAnimation setDuration:0.25];
 	[self.expandAnimation setAnimationCurve:NSAnimationEaseInOut];
@@ -210,12 +213,12 @@
 {
 	if (!self.expanded)
 		return;
-
+	
 	if ([self.detailView respondsToSelector:@selector(canCollapse)]) {
 		if (![self.detailView canCollapse])
 			return;
 	}
-		
+	
 	self.collapseAnimation = [[[NSViewAnimation alloc] initWithViewAnimations:[[self _collapseAnimationInfo] allValues]] autorelease];
 	[self.collapseAnimation setDuration:0.25];
 	[self.collapseAnimation setAnimationCurve:NSAnimationEaseInOut];
