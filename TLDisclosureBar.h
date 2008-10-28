@@ -36,11 +36,14 @@
 	NSImageView *_imageViewLeft;
 	NSImageView *_imageViewRight;
 	NSTextField *_labelField;
+	NSView *_accessoryView;
 }
 @property(readonly,retain) NSImageView *imageViewLeft;
 @property(readonly,retain) NSImageView *imageViewRight;
 @property(readonly,retain) NSButton *disclosureButton;
 @property(readonly,retain) NSTextField *labelField;
+@property(readonly,retain) NSView *accessoryView;
+
 - (id)initWithFrame:(NSRect)frame expanded:(BOOL)expanded;
 - (id)initWithFrame:(NSRect)frame leftImage:(NSImage *)leftImage rightImage:(NSImage *)rightImage label:(NSString *)label expanded:(BOOL)expanded;
 - (void)setLeftImage:(NSImage *)image;

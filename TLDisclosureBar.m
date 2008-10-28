@@ -30,19 +30,33 @@
 #import "TLDisclosureBar.h"
 #import "TLEmbossedTextFieldCell.h"
 
+#define TL_DISCLOSURE_BAR_SUBVIEW_SPACING 6.0f
+#define TL_DISCLOSURE_BAR_TEXT_WIDTH_PADDING 10.0f
+
 @interface TLDisclosureBar ()
 @property(readwrite,retain) NSButton *disclosureButton;
 @property(readwrite,retain) NSImageView *imageViewLeft;
 @property(readwrite,retain) NSImageView *imageViewRight;
 @property(readwrite,retain) NSTextField *labelField;
+@property(readwrite,retain) NSView *accessoryView;
 @end
 
 @interface TLDisclosureBar (Private)
-
+- (void)_adjustSubviews;
 @end
 
 @implementation TLDisclosureBar (Private)
-
+- (void)_adjustSubviews;
+{
+	if (NSMaxX([self.labelField frame]) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING > NSMinX([self.imageViewRight frame]))
+		[self.labelField setHidden:YES];
+	else
+		[self.labelField setHidden:NO];
+	if (NSMaxX([self.imageViewLeft frame]) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING > NSMinX([self.imageViewRight frame]))
+		[self.imageViewLeft setHidden:YES];
+	else
+		[self.imageViewLeft setHidden:NO];
+}
 @end
 
 @implementation TLDisclosureBar
@@ -50,14 +64,13 @@
 @synthesize imageViewLeft = _imageViewLeft;
 @synthesize imageViewRight = _imageViewRight;
 @synthesize labelField = _labelField;
+@synthesize accessoryView = _accessoryView;
 
 - (id)initWithFrame:(NSRect)frame;
 {
 	[NSException raise:NSGenericException format:@"%s is not the designated initialiser for instances of class: %@",__func__,[self className]];
 	return nil;
 }
-
-#define TL_DISCLOSURE_BAR_SUBVIEW_SPACING 8.0f
 
 - (id)initWithFrame:(NSRect)frame expanded:(BOOL)expanded;
 {
@@ -66,7 +79,7 @@
 	
 	self.drawsBorder = YES;
 	self.borderSidesMask = (TLMinYEdge|TLMaxYEdge);
-
+	
 	[self setAutoresizesSubviews:YES];
 	[self setAutoresizingMask:NSViewWidthSizable];
 	
@@ -82,7 +95,7 @@
 	[self.disclosureButton setFocusRingType:NSFocusRingTypeNone];
 	[self.disclosureButton setState:expanded ? NSOnState : NSOffState];
 	[self addSubview:self.disclosureButton];
-		
+	
 	NSRect imageViewLeftFrame = disclosureFrame;
 	imageViewLeftFrame.origin.x = NSMaxX(imageViewLeftFrame) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING;
 	imageViewLeftFrame.size.width = NSHeight(imageViewLeftFrame);
@@ -109,7 +122,6 @@
 	[self.imageViewRight setImageAlignment:NSImageAlignCenter];
 	[self.imageViewRight setAutoresizingMask:NSViewMinXMargin];
 	[self addSubview:self.imageViewRight];
-	
 	
 	NSRect labelRect = imageViewLeftFrame;
 	labelRect.origin.x = NSMaxX(imageViewLeftFrame) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING;
@@ -172,6 +184,12 @@
 	[super dealloc];
 }
 
+- (void)resizeSubviewsWithOldSize:(NSSize)oldSize;
+{
+	[super resizeSubviewsWithOldSize:oldSize];
+	[self _adjustSubviews];
+}
+
 - (void)setLeftImage:(NSImage *)image;
 {
 	[self.imageViewLeft setImage:image];
@@ -184,9 +202,9 @@
 
 - (void)setLabel:(NSString *)label;
 {
-	NSSize size = [label sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]],NSFontAttributeName,nil]];
+	NSSize size = [label sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:[[self.labelField cell] controlSize]]],NSFontAttributeName,nil]];
 	NSRect frame = [self.labelField frame];
-	frame.size.width = size.width + 10;
+	frame.size.width = size.width + TL_DISCLOSURE_BAR_TEXT_WIDTH_PADDING;
 	frame.size.height = size.height;
 	frame.origin.y = NSMidY([self frame]) - size.height / 2.0;
 	[self.labelField setFrame:frame];
