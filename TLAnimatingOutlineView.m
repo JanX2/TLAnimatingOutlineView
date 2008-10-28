@@ -49,6 +49,7 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 - (void)_postDidExpandNotificationWithItem:(TLCollapsibleView *)item;
 - (void)_postWillCollapseNotificationWithItem:(TLCollapsibleView *)item;
 - (void)_postDidCollapseNotificationWithItem:(TLCollapsibleView *)item;
+- (void)_removeDelegateAsObserver;
 @end
 
 @implementation TLAnimatingOutlineView (Private)
@@ -68,15 +69,11 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 {
 	if ([[self subviews] count] == 0)
 		return;
-
+	
 	NSRect newViewFrame = [self frame];
 	newViewFrame.size.height = 0.0f;
 	for (TLCollapsibleView *subview in [self subviews])
 		newViewFrame.size.height += NSHeight([subview frame]);
-	
-	NSSize contentSize = [[self enclosingScrollView] contentSize];
-	if (NSHeight(newViewFrame) < contentSize.height)
-		newViewFrame.size.height = contentSize.height;
 	[self setFrame:newViewFrame];
 }
 
@@ -85,10 +82,10 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 	if (self.animating)
 		return;
 	
-	TLCollapsibleView *animatingSubview = [[info objectForKey:@"viewAnimationInfo"] objectForKey:NSViewAnimationTargetKey];
-	NSRect animatingSubviewEndFrame = [[[info objectForKey:@"viewAnimationInfo"] objectForKey:NSViewAnimationEndFrameKey] rectValue];
+	TLCollapsibleView *animatingSubview = [[info objectForKey:TLCollapsibleViewAnimationInfoKey] objectForKey:NSViewAnimationTargetKey];
+	NSRect animatingSubviewEndFrame = [[[info objectForKey:TLCollapsibleViewAnimationInfoKey] objectForKey:NSViewAnimationEndFrameKey] rectValue];
 	
-	NSMutableArray *allAnimationInfo = [NSMutableArray arrayWithObjects:[info objectForKey:@"viewAnimationInfo"],[info objectForKey:@"detailViewAnimationInfo"],nil];
+	NSMutableArray *allAnimationInfo = [NSMutableArray arrayWithObjects:[info objectForKey:TLCollapsibleViewAnimationInfoKey],[info objectForKey:TLCollapsibleViewDetailViewAnimationInfoKey],nil];
 	
 	NSUInteger indexOfAnimatingSubview = [[self subviews] indexOfObject:animatingSubview];
 	NSUInteger index = indexOfAnimatingSubview + 1;
@@ -101,7 +98,17 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 		[allAnimationInfo addObject:subviewAnimationInfo];
 		newPrecedingViewFrame = newSubviewFrame;
 	}
-		
+	
+	// If we're expanding, we temporarily change our frame's height to that of the NSClip view (if we're in a scroll view) so the subviews drawings aren't clipped as they move down the screen. Our frame's size is finalised after the animation is complete. We only expand as far as the content height for two reasons: 1) drawing is limited to the NSClip view's bounds anyway 2) scrollbar's appear juddery if we expand to the full neccessary height to encompass the expanded views from a height that is less than the clip view's height.
+	if ([[info objectForKey:TLCollapsibleViewAnimationTypeKey] unsignedIntValue] == TLCollapsibleViewExpansionAnimation) {
+		if ([self enclosingScrollView]) {
+			NSSize contentSize = [[self enclosingScrollView] contentSize];
+			NSRect tempFrame = [self frame];
+			tempFrame.size.height = MAX(tempFrame.size.height,contentSize.height); // only set out frame to the content's height if the current frame is less than the content's height.
+			[self setFrame:tempFrame];
+		}
+	}
+	
 	NSViewAnimation *animation = [[[NSViewAnimation alloc] initWithViewAnimations:allAnimationInfo] autorelease];
 	[animation setDuration:0.25];
 	[animation setDelegate:self];
@@ -129,6 +136,15 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 	[[NSNotificationCenter defaultCenter] postNotificationName:TLAnimatingOutlineViewItemDidCollapseNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:item,@"NSObject",nil]];	
 }
 
+- (void)_removeDelegateAsObserver;
+{
+	// we explicitly remove the delegate as observer of these notifications, else we potentially remove it from observing those that the client code has set up.
+	[[NSNotificationCenter defaultCenter] removeObserver:self.delegate name:TLAnimatingOutlineViewItemWillExpandNotification object:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self.delegate name:TLAnimatingOutlineViewItemDidExpandNotification object:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self.delegate name:TLAnimatingOutlineViewItemWillCollapseNotification object:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self.delegate name:TLAnimatingOutlineViewItemDidCollapseNotification object:self];	
+}
+
 @end
 
 @implementation TLAnimatingOutlineView
@@ -139,16 +155,12 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 {
 	if (![super initWithFrame:frame])
 		return nil;
-	[[self animationForKey:@"frameSize"] setDelegate:self];
     return self;
 }
 
 - (NSArray *)keysForCoding;
 {
-	NSArray *keys = [NSArray arrayWithObjects:nil];
-	if ([[[self class] superclass] instancesRespondToSelector:@selector(keysForCoding)])
-		keys = [[(id)super keysForCoding] arrayByAddingObjectsFromArray:keys];
-	return keys;
+	return [NSArray arrayWithObjects:nil];
 }
 
 - (id)initWithCoder:(NSCoder *)coder;
@@ -169,6 +181,7 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 
 - (void)dealloc;
 {
+	[self _removeDelegateAsObserver];
 	[super dealloc];
 }
 
@@ -181,9 +194,9 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 {
 	if (_delegate == delegate)
 		return;
-	[[NSNotificationCenter defaultCenter] removeObserver:_delegate];
+	[self _removeDelegateAsObserver];
 	_delegate = delegate;
-
+	
 	if ([(id)_delegate respondsToSelector:@selector(outlineViewItemWillExpand:)])
 		[[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(outlineViewItemWillExpand:) name:TLAnimatingOutlineViewItemWillExpandNotification object:self];
 	if ([(id)_delegate respondsToSelector:@selector(outlineViewItemDidExpand:)])
@@ -200,16 +213,16 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 	itemFrame.size.height = NSHeight([detailView frame]); // the initialiser of TLCollapsibleView reserves the right to increase the height of the view to include the disclosure bar frame
 	if ([[self subviews] count] != 0)
 		itemFrame.origin.y = NSMaxY([[[self subviews] lastObject] frame]);
-
+	
 	TLCollapsibleView *item = [[[TLCollapsibleView alloc] initWithFrame:itemFrame detailView:detailView expanded:expanded] autorelease];
 	[[item disclosureBar] setLabel:label];
 	[[item disclosureBar] setLeftImage:image];
-
+	
 	[self addSubview:item];
 	
 	[self _updateDisclosureBarBorders];
 	[self _sizeToFit];	
-		
+	
 	return item;
 }
 
@@ -320,14 +333,14 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 	if ([toggledView.detailView respondsToSelector:toggledView.expanded ? @selector(viewDidExpand) : @selector(viewDidExpand)])
 		toggledView.expanded ? [toggledView.detailView viewDidExpand] : [toggledView.detailView viewDidCollapse];
 	[[toggledView.disclosureBar disclosureButton] setState:toggledView.expanded ? NSOnState : NSOffState];
-
+	
 	[self _updateDisclosureBarBorders];
 	[self _sizeToFit];
 	
 	NSRect newViewFrame = [self frame];
 	newViewFrame.size.width = [[self enclosingScrollView] contentSize].width;
 	[self setFrame:newViewFrame];
-
+	
 }
 
 @end
