@@ -37,11 +37,12 @@
 {
 	NSSize contentSize = [_scrollView contentSize];
 	TLAnimatingOutlineView *outlineView = [[[TLAnimatingOutlineView alloc] initWithFrame:NSMakeRect(0.0f, 0.0f, contentSize.width, contentSize.height)] autorelease];
-	[outlineView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+	[outlineView setAutoresizingMask:NSViewWidthSizable]; // should not be combined with NSviewHieghtSizable else we incorrect scrollbar showing/hiding/sizing.
+	[_scrollView setDocumentView:outlineView];
 	
 	id view = [outlineView addView:_detailView1 withImage:[NSImage imageNamed:NSImageNameQuickLookTemplate] label:[NSString stringWithString:@"First View"]  expanded:YES];
 	[[view disclosureBar] setRightImage:[NSImage imageNamed:NSImageNameFollowLinkFreestandingTemplate]];
-
+	
 	view = [outlineView addView:_detailView2 withImage:[NSImage imageNamed:NSImageNameInfo] label:[NSString stringWithString:@"Next View"]  expanded:YES];
 	[[view disclosureBar] setRightImage:[NSImage imageNamed:NSImageNameFollowLinkFreestandingTemplate]];
 	
@@ -51,6 +52,5 @@
 	view = [outlineView addView:_detailView4 withImage:[NSImage imageNamed:NSImageNamePreferencesGeneral] label:[NSString stringWithString:@"Yet another"]  expanded:NO];
 	[[view disclosureBar] setRightImage:[NSImage imageNamed:NSImageNameFollowLinkFreestandingTemplate]];
 	
-	[_scrollView setDocumentView:outlineView];
 }
 @end
