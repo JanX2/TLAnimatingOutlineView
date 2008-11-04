@@ -27,6 +27,9 @@
 //	IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
 //	OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// If you use it, acknowledgement in an About Page or other appropriate place would be nice.
+// For example, "Contains code from "TLAnimatingOutlineView" by Jonathan Dann http://code.google.com/p/tlanimatingoutlineview/" will // do.
+
 // the NS-versions are deprecated in 64-bit. CG-version is 64-bit but can't create a unique mask from all combnations.
 enum {
 	TLMinXEdge = 1 << 0,
