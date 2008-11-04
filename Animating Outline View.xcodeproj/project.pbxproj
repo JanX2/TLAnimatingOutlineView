@@ -10,19 +10,17 @@
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
-		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		AB5E07840EAE0DE100176558 /* TLCollapsibleView.m in Sources */ = {isa = PBXBuildFile; fileRef = AB5E07830EAE0DE100176558 /* TLCollapsibleView.m */; };
 		AB5E07C50EAE1F0E00176558 /* TLAnimatingOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = AB5E07C40EAE1F0E00176558 /* TLAnimatingOutlineView.m */; };
+		ABB5FD4A0EBDF54200E7AA11 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABB5FD490EBDF54200E7AA11 /* Cocoa.framework */; };
 		ABC9150F0EACA7BB0003DDDB /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC9150E0EACA7BB0003DDDB /* AppController.m */; };
 		ABC915200EACB01B0003DDDB /* TLGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC9151F0EACB01B0003DDDB /* TLGradientView.m */; };
 		ABC915410EACEF830003DDDB /* TLDisclosureBar.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC915400EACEF830003DDDB /* TLDisclosureBar.m */; };
 		ABCB94D70EB1376E00205467 /* TLEmbossedTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ABCB94D60EB1376E00205467 /* TLEmbossedTextFieldCell.m */; };
-		ABEAED0B0EAFC304000A20D4 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABEAED0A0EAFC303000A20D4 /* Quartz.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -36,6 +34,7 @@
 		AB5E07830EAE0DE100176558 /* TLCollapsibleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLCollapsibleView.m; sourceTree = "<group>"; };
 		AB5E07C30EAE1F0E00176558 /* TLAnimatingOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLAnimatingOutlineView.h; sourceTree = "<group>"; };
 		AB5E07C40EAE1F0E00176558 /* TLAnimatingOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLAnimatingOutlineView.m; sourceTree = "<group>"; };
+		ABB5FD490EBDF54200E7AA11 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		ABC9150D0EACA7BB0003DDDB /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		ABC9150E0EACA7BB0003DDDB /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		ABC9151E0EACB01B0003DDDB /* TLGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLGradientView.h; sourceTree = "<group>"; };
@@ -44,7 +43,6 @@
 		ABC915400EACEF830003DDDB /* TLDisclosureBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLDisclosureBar.m; sourceTree = "<group>"; };
 		ABCB94D50EB1376E00205467 /* TLEmbossedTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLEmbossedTextFieldCell.h; sourceTree = "<group>"; };
 		ABCB94D60EB1376E00205467 /* TLEmbossedTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLEmbossedTextFieldCell.m; sourceTree = "<group>"; };
-		ABEAED0A0EAFC303000A20D4 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,8 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				ABEAED0B0EAFC304000A20D4 /* Quartz.framework in Frameworks */,
+				ABB5FD4A0EBDF54200E7AA11 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,15 +75,6 @@
 				ABC9150E0EACA7BB0003DDDB /* AppController.m */,
 			);
 			name = Classes;
-			sourceTree = "<group>";
-		};
-		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				ABEAED0A0EAFC303000A20D4 /* Quartz.framework */,
-				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
-			);
-			name = "Linked Frameworks";
 			sourceTree = "<group>";
 		};
 		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
@@ -141,10 +129,18 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				ABB5FD480EBDF53200E7AA11 /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		ABB5FD480EBDF53200E7AA11 /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ABB5FD490EBDF54200E7AA11 /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
