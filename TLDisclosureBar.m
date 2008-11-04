@@ -264,14 +264,11 @@
 
 - (void)mouseDown:(NSEvent *)event;
 {
-	[super mouseDown:event];
 	self.fillOption = TLGradientViewClickedGradient;
-	[self setNeedsDisplay:YES];
 }
 
 - (void)mouseUp:(NSEvent *)event;
 {
-	[super mouseUp:event];
 	self.fillOption = TLGradientViewActiveGradient;
 	
 	NSPoint mouseLocation = [self convertPoint:[event locationInWindow] fromView:nil];
