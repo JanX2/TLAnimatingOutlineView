@@ -44,9 +44,11 @@
 @implementation TLGradientView
 @synthesize activeFillGradient = _activeFillGradient;
 @synthesize inactiveFillGradient = _inactiveFillGradient;
-@synthesize clickedGradient = _clickedGradient;
+@synthesize clickedFillGradient = _clickedFillGradient;
+@synthesize fillOption = _fillOption;
 @synthesize fillAngle = _fillAngle;
 @synthesize drawsHighlight = _drawsHighlight;
+@synthesize highlightColor = _highlightColor;
 @synthesize drawsBorder = _drawsBorder;
 @synthesize borderColor = _borderColor;
 @synthesize borderSidesMask = _borderSidesMask;
@@ -55,21 +57,27 @@
 {
 	if (![super initWithFrame:frame])
 		return nil;
-	self.activeFillGradient = [[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedWhite:0.916f alpha:1.0f],[NSColor colorWithCalibratedWhite:0.916f alpha:1.0f],nil]] autorelease];
+	
+	self.activeFillGradient = [[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedWhite:0.916 alpha:1.0],[NSColor colorWithCalibratedWhite:0.814 alpha:1.0],nil]] autorelease];
 	self.inactiveFillGradient = [[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedWhite:0.916 alpha:1.0],[NSColor colorWithCalibratedWhite:0.916 alpha:1.0],nil]] autorelease];
-	self.clickedGradient = [[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedWhite:0.916 alpha:1.0],[NSColor colorWithCalibratedWhite:0.814 alpha:1.0],nil]] autorelease];
+	self.clickedFillGradient = [[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedWhite:0.916 alpha:1.0],[NSColor colorWithCalibratedWhite:0.814 alpha:1.0],nil]] autorelease];
+	self.fillOption = TLGradientViewActiveGradient;
 	self.fillAngle = 270.0f;
+	
 	self.borderColor = [NSColor lightGrayColor];
 	self.borderSidesMask = (TLMinXEdge|TLMaxXEdge|TLMinYEdge|TLMaxYEdge);
+	
+	self.highlightColor = [NSColor colorWithCalibratedWhite:0.97f alpha:1.0f];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidBecomeActiveNotification object:NSApp];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidResignActiveNotification object:NSApp];
+	
     return self;
 }
 
 - (NSArray *)keysForCoding;
 {
-	NSArray *keys = [NSArray arrayWithObjects:nil];
-	if ([[[self class] superclass] instancesRespondToSelector:@selector(keysForCoding)])
-		keys = [[(id)super keysForCoding] arrayByAddingObjectsFromArray:keys];
-	return keys;
+	return [NSArray arrayWithObjects:nil];
 }
 
 - (id)initWithCoder:(NSCoder *)coder;
@@ -93,8 +101,9 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self.activeFillGradient release];
 	[self.inactiveFillGradient release];
-	[self.clickedGradient release];
+	[self.clickedFillGradient release];
 	[self.borderColor release];
+	[self.highlightColor release];
 	[super dealloc];
 }
 
@@ -103,13 +112,8 @@
 	[super viewWillMoveToSuperview:superview];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidResignKeyNotification object:[self window]];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:[self window]];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidBecomeActiveNotification object:[self window]];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidResignActiveNotification object:[self window]];
-	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(display) name:NSWindowDidResignKeyNotification object:[superview window]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(display) name:NSWindowDidBecomeKeyNotification object:[superview window]];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(display) name:NSApplicationDidBecomeActiveNotification object:NSApp];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(display) name:NSApplicationDidResignActiveNotification object:NSApp];
 }
 
 - (void)setBorderSidesMask:(TLRectEdge)mask;
@@ -118,37 +122,99 @@
 	[self setNeedsDisplay:YES];
 }
 
+- (void)setClickedFillGradient:(NSGradient *)gradient;
+{
+	if (_clickedFillGradient == gradient)
+		return;
+	[_clickedFillGradient release];
+	_clickedFillGradient = [gradient copy];
+	[self setNeedsDisplay:YES];
+}
+
+- (void)setActiveFillGradient:(NSGradient *)gradient;
+{
+	if (_activeFillGradient == gradient)
+		return;
+	[_activeFillGradient release];
+	_activeFillGradient = [gradient copy];
+	[self setNeedsDisplay:YES];
+}
+
+- (void)setInactiveFillGradient:(NSGradient *)gradient;
+{
+	if (_inactiveFillGradient == gradient)
+		return;
+	[_inactiveFillGradient release];
+	_inactiveFillGradient = [gradient copy];
+	[self setNeedsDisplay:YES];
+}
+
+- (void)setFillOption:(TLGradientViewFillOption)options;
+{
+	_fillOption = options;
+	[self setNeedsDisplay:YES];
+}
+
+- (void)setFillAngle:(CGFloat)angle;
+{
+	_fillAngle = angle;
+	[self setNeedsDisplay:YES];
+}
+
+- (void)setDrawsHighlight:(BOOL)flag;
+{
+	if (_drawsHighlight == flag)
+		return;
+	_drawsHighlight = flag;
+	[self setNeedsDisplay:YES];
+}
+
+- (void)setDrawsBorder:(BOOL)flag;
+{
+	if (_drawsBorder == flag)
+		return;
+	_drawsBorder = flag;
+	[self setNeedsDisplay:YES];
+}
+
+- (void)setBorderColor:(NSColor *)color;
+{
+	if (_borderColor = color)
+		return;
+	[_borderColor release];
+	_borderColor = [color copy];
+	[self setNeedsDisplay:YES];
+}
+
 - (void)drawRect:(NSRect)rect;
 {
-	[([[self window] isKeyWindow] ? self.activeFillGradient : self.inactiveFillGradient) drawInRect:[self bounds] angle:self.fillAngle];
+	NSGradient *fillGradient = nil;
+	if (self.fillOption != TLGradientViewClickedGradient)
+		fillGradient = [[self window] isKeyWindow] ? self.activeFillGradient : self.inactiveFillGradient;
+	else
+		fillGradient = self.clickedFillGradient;
 	
-	if (self.drawsHighlight) {
-		[[NSColor colorWithCalibratedWhite:0.88f alpha:1.0f] setStroke];
-		[[NSBezierPath bezierPathWithRect:NSMakeRect(NSMinX([self bounds]), [self isFlipped] ? NSMinY([self bounds]) + 1.5f : NSMaxY([self bounds]) - 1.5f, NSWidth([self bounds]), 0.0f)] stroke];
-	}
+	[fillGradient drawInRect:[self bounds] angle:self.fillAngle];
 	
 	if (self.drawsBorder) {
 		[self.borderColor setStroke];
-		NSBezierPath *border = nil;
+		NSBezierPath *border = [NSBezierPath bezierPath];
 		NSRect bounds = [self bounds];
-		if (self.borderSidesMask & TLMinXEdge) {
-			border = [NSBezierPath bezierPathWithRect:NSMakeRect(NSMinX(bounds) + 0.5f, NSMinY(bounds), 0.0f, NSHeight([self bounds]))];
-			[border stroke];
-		}			
-		if (self.borderSidesMask & TLMaxXEdge) {
-			border = [NSBezierPath bezierPathWithRect:NSMakeRect(NSMaxX(bounds) - 0.5f, NSMinY(bounds), 0.0f, NSHeight([self bounds]))];
-			[border stroke];			
-		}
-		if (self.borderSidesMask & TLMinYEdge) {
-			border = [NSBezierPath bezierPathWithRect:NSMakeRect(NSMinX(bounds), NSMinY(bounds) + 0.5f, NSWidth(bounds), 0.0f)];
-			[border stroke];	
-		}
-		if (self.borderSidesMask & TLMaxYEdge) {
-			border = [NSBezierPath bezierPathWithRect:NSMakeRect(NSMinX(bounds), NSMaxY(bounds) - 0.5f, NSWidth(bounds), 0.0f)];
-			[border stroke];			
-		}
+		if (self.borderSidesMask & TLMinXEdge)
+			[border appendBezierPath:[NSBezierPath bezierPathWithRect:NSMakeRect(NSMinX(bounds) + 0.5f, NSMinY(bounds), 0.0f, NSHeight(bounds))]];
+		if (self.borderSidesMask & TLMaxXEdge)
+			[border appendBezierPath:[NSBezierPath bezierPathWithRect:NSMakeRect(NSMaxX(bounds) - 0.5f, NSMinY(bounds), 0.0f, NSHeight(bounds))]];
+		if (self.borderSidesMask & TLMinYEdge)
+			[border appendBezierPath:[NSBezierPath bezierPathWithRect:NSMakeRect(NSMinX(bounds), NSMinY(bounds) + 0.5f, NSWidth(bounds), 0.0f)]];
+		if (self.borderSidesMask & TLMaxYEdge)
+			[border appendBezierPath:[NSBezierPath bezierPathWithRect:NSMakeRect(NSMinX(bounds), NSMaxY(bounds) - 0.5f, NSWidth(bounds), 0.0f)]];
+		[border stroke];
 	}
 	
+	if (self.drawsHighlight) {
+		[self.highlightColor setStroke];
+		[[NSBezierPath bezierPathWithRect:NSMakeRect(NSMinX([self bounds]), [self isFlipped] ? NSMinY([self bounds]) + (self.borderSidesMask & TLMinYEdge ? 1.5f : 0.5f) : NSMaxY([self bounds]) - (self.borderSidesMask & TLMaxYEdge ? 1.5f : 0.5f), NSWidth([self bounds]), 0.0f)] stroke];
+	}
 }
 
 @end

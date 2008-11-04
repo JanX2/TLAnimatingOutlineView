@@ -30,22 +30,33 @@
 #import <Cocoa/Cocoa.h>
 #import "TLGeometry.h"
 
-@interface TLGradientView : NSView <NSCoding>{
+enum {
+	TLGradientViewActiveGradient = 0,
+	TLGradientViewInactiveGradient = 1,
+	TLGradientViewClickedGradient = 2
+};
+typedef NSUInteger TLGradientViewFillOption;
+
+@interface TLGradientView : NSView <NSCoding> {
 @private
 	NSGradient *_activeFillGradient;
 	NSGradient *_inactiveFillGradient;
-	NSGradient *_clickedGradient;
+	NSGradient *_clickedFillGradient;
+	TLGradientViewFillOption _fillOption;
 	CGFloat _fillAngle;
 	BOOL _drawsHighlight;
+	NSColor *_highlightColor;
 	BOOL _drawsBorder;
 	NSColor *_borderColor;
 	TLRectEdge _borderSidesMask;
 }
 @property(readwrite,copy) NSGradient *activeFillGradient;
 @property(readwrite,copy) NSGradient *inactiveFillGradient;
-@property(readwrite,copy) NSGradient *clickedGradient;
+@property(readwrite,copy) NSGradient *clickedFillGradient;
+@property(readwrite,assign) TLGradientViewFillOption fillOption;
 @property(readwrite,assign) CGFloat fillAngle;
 @property(readwrite,assign) BOOL drawsHighlight;
+@property(readwrite,copy) NSColor *highlightColor;
 @property(readwrite,assign) BOOL drawsBorder;
 @property(readwrite,copy) NSColor *borderColor;
 @property(readwrite,assign) TLRectEdge borderSidesMask;
