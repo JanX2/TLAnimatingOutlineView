@@ -37,20 +37,56 @@
 {
 	NSSize contentSize = [_scrollView contentSize];
 	TLAnimatingOutlineView *outlineView = [[[TLAnimatingOutlineView alloc] initWithFrame:NSMakeRect(0.0f, 0.0f, contentSize.width, contentSize.height)] autorelease];
-	[outlineView setAutoresizingMask:NSViewWidthSizable]; // should not be combined with NSviewHieghtSizable else we incorrect scrollbar showing/hiding/sizing.
+	[outlineView setAutoresizingMask:NSViewWidthSizable]; // should not be combined with NSviewHieghtSizable else we have incorrect scrollbar showing/hiding/sizing behaviour.
 	[_scrollView setDocumentView:outlineView];
 	
 	id view = [outlineView addView:_detailView1 withImage:[NSImage imageNamed:NSImageNameQuickLookTemplate] label:[NSString stringWithString:@"First View"]  expanded:YES];
-	[[view disclosureBar] setRightImage:[NSImage imageNamed:NSImageNameFollowLinkFreestandingTemplate]];
+	TLGradientView *accessoryView = [[[TLGradientView alloc] initWithFrame:NSMakeRect(0.0, 0, 40, 18)] autorelease];
+	[[view disclosureBar] setAccessoryView:accessoryView];
 	
 	view = [outlineView addView:_detailView2 withImage:[NSImage imageNamed:NSImageNameInfo] label:[NSString stringWithString:@"Next View"]  expanded:YES];
-	[[view disclosureBar] setRightImage:[NSImage imageNamed:NSImageNameFollowLinkFreestandingTemplate]];
 	
 	view = [outlineView addView:_detailView3 withImage:[NSImage imageNamed:NSImageNameNetwork] label:[NSString stringWithString:@"And again"]  expanded:NO];
-	[[view disclosureBar] setRightImage:[NSImage imageNamed:NSImageNameFollowLinkFreestandingTemplate]];
 	
 	view = [outlineView addView:_detailView4 withImage:[NSImage imageNamed:NSImageNamePreferencesGeneral] label:[NSString stringWithString:@"Yet another"]  expanded:NO];
-	[[view disclosureBar] setRightImage:[NSImage imageNamed:NSImageNameFollowLinkFreestandingTemplate]];
 	
+//	[self performSelector:@selector(insertionTest) withObject:nil afterDelay:4.0f];
+}
+
+- (void)frameTest;
+{
+	TLAnimatingOutlineView *outlineView = [_scrollView documentView];
+	NSView *view = [(TLCollapsibleView *)[[outlineView subviews] objectAtIndex:0] detailView];
+	NSRect frame = [view frame];
+	frame.size.height += 100.0f;
+	[view setFrame:frame];
+}
+
+- (void)insertionTest;
+{
+	TLAnimatingOutlineView *outlineView = [_scrollView documentView];
+	
+	NSView *customView = [[[TLGradientView alloc] initWithFrame:NSMakeRect(0.0f, 0.0f, 700.0f, 300.0f)] autorelease];
+	
+	[outlineView insertView:customView atRow:1 withImage:nil label:@"test" expanded:NO animate:YES];
+	
+	[self performSelector:@selector(removalTest) withObject:nil afterDelay:4.0f];
+}
+
+- (void)removalTest;
+{
+	TLAnimatingOutlineView *outlineView = [_scrollView documentView];
+	[outlineView removeItemAtRow:2 animate:YES];
+	[self performSelector:@selector(additionTest) withObject:nil afterDelay:4.0f];
+}
+
+- (void)additionTest;
+{
+	TLAnimatingOutlineView *outlineView = [_scrollView documentView];
+	NSView *customView = [[[TLGradientView alloc] initWithFrame:NSMakeRect(0.0f, 0.0f, 700.0f, 300.0f)] autorelease];
+	
+	[outlineView addView:customView withImage:nil label:@"added" expanded:NO animate:NO];
+	
+	[self performSelector:@selector(frameTest) withObject:nil afterDelay:4.0f];
 }
 @end
