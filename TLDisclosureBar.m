@@ -29,42 +29,69 @@
 
 #import "TLDisclosureBar.h"
 #import "TLEmbossedTextFieldCell.h"
+#import "TLCollapsibleView.h"
 
 #define TL_DISCLOSURE_BAR_SUBVIEW_SPACING 6.0f
 #define TL_DISCLOSURE_BAR_TEXT_WIDTH_PADDING 10.0f
+#define TL_DISCLOSURE_BAR_MINX_PADDING 8.0f
 
 @interface TLDisclosureBar ()
 @property(readwrite,retain) NSButton *disclosureButton;
 @property(readwrite,retain) NSImageView *imageViewLeft;
-@property(readwrite,retain) NSImageView *imageViewRight;
 @property(readwrite,retain) NSTextField *labelField;
-@property(readwrite,retain) NSView *accessoryView;
+//@property(readwrite,retain) NSView *accessoryView;
 @end
 
 @interface TLDisclosureBar (Private)
 - (void)_adjustSubviews;
+- (void)_adjustSubviewsFollowingResize;
 @end
 
 @implementation TLDisclosureBar (Private)
 - (void)_adjustSubviews;
 {
-	if (NSMaxX([self.labelField frame]) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING > NSMinX([self.imageViewRight frame]))
+	NSRect imageViewLeftFrame = [self.imageViewLeft frame];
+	imageViewLeftFrame.origin.x = (self.hasDisclosureButton ? NSMaxX([self.disclosureButton frame]) : NSMinX([self frame])) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING;
+	[self.imageViewLeft setFrame:imageViewLeftFrame];
+	
+	NSRect labelFieldFrame = [self.labelField frame];
+	labelFieldFrame.origin.x = NSMaxX(imageViewLeftFrame) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING;
+	labelFieldFrame.size.width = (self.accessoryView ? NSMinX([self.accessoryView frame]) : NSMaxX([self frame])) - NSMinX(imageViewLeftFrame);
+	[self.labelField setFrame:labelFieldFrame];
+}
+
+- (void)_adjustSubviewsFollowingResize;
+{
+	NSSize labelSize = [[self.labelField stringValue] sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:[[self.labelField cell] controlSize]]],NSFontAttributeName,nil]];
+	CGFloat limitingXCoordinate = self.accessoryView ? NSMinX([self.accessoryView frame]) : NSMaxX([self frame]);
+
+	if (NSMinX([self.labelField frame]) + labelSize.width / 2.0 + TL_DISCLOSURE_BAR_SUBVIEW_SPACING > limitingXCoordinate) {
+		[self.labelField setAutoresizingMask:NSViewNotSizable]; // To avoi the classic resising bug we stop autoresizing before the view's frame.size.width is reduced to zero. We reactiveate autoresizing in the else block.
 		[self.labelField setHidden:YES];
-	else
+	} else {
+		// BUGFIX: even with changing the autoresizing mask, sometimes when the view is resized too quickly we get the classic autoresizing confusion bug so we set the frame of the label field to compensate.
+		NSRect labelFieldFrame = [self.labelField frame];
+		labelFieldFrame.origin.x = NSMaxX([self.imageViewLeft frame]) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING;
+		labelFieldFrame.size.width = limitingXCoordinate - NSMinX(labelFieldFrame);
+		[self.labelField setFrame:labelFieldFrame];
+		[self.labelField setAutoresizingMask:NSViewWidthSizable];
 		[self.labelField setHidden:NO];
-	if (NSMaxX([self.imageViewLeft frame]) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING > NSMinX([self.imageViewRight frame]))
+	}
+	
+	if (NSMaxX([self.imageViewLeft frame]) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING > limitingXCoordinate)
 		[self.imageViewLeft setHidden:YES];
 	else
 		[self.imageViewLeft setHidden:NO];
 }
+
 @end
 
 @implementation TLDisclosureBar
 @synthesize disclosureButton = _disclosureButton;
 @synthesize imageViewLeft = _imageViewLeft;
-@synthesize imageViewRight = _imageViewRight;
 @synthesize labelField = _labelField;
 @synthesize accessoryView = _accessoryView;
+@dynamic hasDisclosureButton;
 
 - (id)initWithFrame:(NSRect)frame;
 {
@@ -79,23 +106,26 @@
 	
 	self.drawsBorder = YES;
 	self.borderSidesMask = (TLMinYEdge|TLMaxYEdge);
-	
+	self.drawsHighlight = YES;
 	[self setAutoresizesSubviews:YES];
 	[self setAutoresizingMask:NSViewWidthSizable];
 	
 	self.activeFillGradient = [[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedWhite:0.916 alpha:1.0],[NSColor colorWithCalibratedWhite:0.814 alpha:1.0],nil]] autorelease];
+	self.inactiveFillGradient = [[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedWhite:0.916 alpha:1.0],[NSColor colorWithCalibratedWhite:0.916 alpha:1.0],nil]] autorelease];
+	self.clickedFillGradient = [[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedWhite:0.83f alpha:1.0f],nil]] autorelease];
 	
 	NSRect disclosureFrame = frame;
-	disclosureFrame.origin.x += 8.0f;
+	disclosureFrame.origin.x += TL_DISCLOSURE_BAR_MINX_PADDING;
 	disclosureFrame.size.width = 10.0f;
-	self.disclosureButton = [[[NSButton alloc] initWithFrame:disclosureFrame] autorelease];
+	NSButton *disclosureButton = [[[NSButton alloc] initWithFrame:disclosureFrame] autorelease];
+	self.disclosureButton = disclosureButton;
 	[self.disclosureButton setButtonType:NSOnOffButton];
 	[self.disclosureButton setBezelStyle:NSDisclosureBezelStyle];
 	[self.disclosureButton setTitle:@""];
 	[self.disclosureButton setFocusRingType:NSFocusRingTypeNone];
 	[self.disclosureButton setState:expanded ? NSOnState : NSOffState];
 	[self addSubview:self.disclosureButton];
-	
+		
 	NSRect imageViewLeftFrame = disclosureFrame;
 	imageViewLeftFrame.origin.x = NSMaxX(imageViewLeftFrame) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING;
 	imageViewLeftFrame.size.width = NSHeight(imageViewLeftFrame);
@@ -108,24 +138,10 @@
 	[self.imageViewLeft setAllowsCutCopyPaste:NO];
 	[self.imageViewLeft setImageAlignment:NSImageAlignCenter];
 	[self addSubview:self.imageViewLeft];
-	
-	NSRect imageViewRightFrame = frame;
-	imageViewRightFrame.origin.x = NSMaxX(imageViewRightFrame) - TL_DISCLOSURE_BAR_SUBVIEW_SPACING - NSHeight(imageViewRightFrame);
-	imageViewRightFrame.size.width = NSHeight(imageViewRightFrame);
-	imageViewRightFrame.origin.y -= 1.0f;
-	self.imageViewRight = [[[NSImageView alloc] initWithFrame:imageViewRightFrame] autorelease];
-	[self.imageViewRight setEditable:NO];
-	[self.imageViewRight setAnimates:YES];
-	[self.imageViewRight setImageFrameStyle:NSImageFrameNone];
-	[self.imageViewRight setImageScaling:NSImageScaleProportionallyDown];
-	[self.imageViewRight setAllowsCutCopyPaste:NO];
-	[self.imageViewRight setImageAlignment:NSImageAlignCenter];
-	[self.imageViewRight setAutoresizingMask:NSViewMinXMargin];
-	[self addSubview:self.imageViewRight];
-	
+		
 	NSRect labelRect = imageViewLeftFrame;
 	labelRect.origin.x = NSMaxX(imageViewLeftFrame) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING;
-	labelRect.size.width = 0.0f;
+	labelRect.size.width = NSWidth([self frame]) - NSMinX(labelRect);
 	self.labelField = [[[NSTextField alloc] initWithFrame:labelRect] autorelease];
 	[self.labelField setEditable:NO];
 	[self.labelField setBezeled:NO];
@@ -136,27 +152,24 @@
 	[[self.labelField cell] setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:[[self.labelField cell] controlSize]]]];
 	[[self.labelField cell] setWraps:NO];
 	[[self.labelField cell] setLineBreakMode:NSLineBreakByTruncatingTail];
+	[self.labelField setAutoresizingMask:NSViewWidthSizable];
 	[self addSubview:self.labelField];
-	
+		
 	return self;
 }
 
-- (id)initWithFrame:(NSRect)frame leftImage:(NSImage *)leftImage rightImage:(NSImage *)rightImage label:(NSString *)label expanded:(BOOL)expanded;
+- (id)initWithFrame:(NSRect)frame leftImage:(NSImage *)leftImage label:(NSString *)label expanded:(BOOL)expanded;
 {
 	if (![self initWithFrame:frame expanded:expanded])
 		return nil;
 	[self setLeftImage:leftImage];
-	[self setRightImage:rightImage];
 	[self setLabel:label];
 	return self;
 }
 
 - (NSArray *)keysForCoding;
 {
-	NSArray *keys = [NSArray arrayWithObjects:nil];
-	if ([[[self class] superclass] instancesRespondToSelector:@selector(keysForCoding)])
-		keys = [[(id)super keysForCoding] arrayByAddingObjectsFromArray:keys];
-	return keys;
+	return [NSArray arrayWithObjects:nil];
 }
 
 - (id)initWithCoder:(NSCoder *)coder;
@@ -179,7 +192,7 @@
 {
 	[self.disclosureButton release];
 	[self.imageViewLeft release];
-	[self.imageViewRight release];
+	[self.accessoryView release];
 	[self.labelField release];
 	[super dealloc];
 }
@@ -187,6 +200,19 @@
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize;
 {
 	[super resizeSubviewsWithOldSize:oldSize];
+	[self _adjustSubviewsFollowingResize];
+}
+
+- (BOOL)hasDisclosureButton;
+{
+	return ![self.disclosureButton isHidden];
+}
+
+- (void)setHasDisclosureButton:(BOOL)flag;
+{
+	if (self.hasDisclosureButton == flag)
+		return;
+	[self.disclosureButton setHidden:self.hasDisclosureButton];
 	[self _adjustSubviews];
 }
 
@@ -195,54 +221,68 @@
 	[self.imageViewLeft setImage:image];
 }
 
-- (void)setRightImage:(NSImage *)image;
+- (void)setAccessoryView:(NSView *)accessoryView;
 {
-	[self.imageViewRight setImage:image];
+	if (_accessoryView == accessoryView)
+		return;
+	if (_accessoryView) {
+		[_accessoryView removeFromSuperview];
+		[_accessoryView release];
+	}
+	_accessoryView = [accessoryView retain];
+	NSRect accessoryViewFrame = [_accessoryView frame];
+	accessoryViewFrame.origin.x = NSMaxX([self frame]) - NSWidth(accessoryViewFrame);
+	[accessoryView setFrame:accessoryViewFrame];
+	
+	if (([accessoryView autoresizingMask] & NSViewMinXMargin) == 0)
+		[accessoryView setAutoresizingMask:NSViewMinXMargin];
+	
+	[self addSubview:_accessoryView];
+	
+	NSRect labelFieldFrame = [self.labelField frame];
+	labelFieldFrame.size.width = NSWidth([self frame]) - NSMinX(labelFieldFrame) - NSWidth(accessoryViewFrame);
+	[self.labelField setFrame:labelFieldFrame];
 }
 
 - (void)setLabel:(NSString *)label;
 {
 	NSSize size = [label sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:[[self.labelField cell] controlSize]]],NSFontAttributeName,nil]];
 	NSRect frame = [self.labelField frame];
-	frame.size.width = size.width + TL_DISCLOSURE_BAR_TEXT_WIDTH_PADDING;
 	frame.size.height = size.height;
 	frame.origin.y = NSMidY([self frame]) - size.height / 2.0;
 	[self.labelField setFrame:frame];
 	[self.labelField setStringValue:label];
 }
 
+- (NSString *)label;
+{
+	return [self.labelField stringValue];
+}
+
 - (void)mouseDown:(NSEvent *)event;
 {
 	[super mouseDown:event];
-	self.activeFillGradient = [[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedWhite:0.83f alpha:1.0f],nil]] autorelease];
+	self.fillOption = TLGradientViewClickedGradient;
 	[self setNeedsDisplay:YES];
 }
 
 - (void)mouseUp:(NSEvent *)event;
 {
 	[super mouseUp:event];
-	self.activeFillGradient = [[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedWhite:0.916 alpha:1.0],[NSColor colorWithCalibratedWhite:0.814 alpha:1.0],nil]] autorelease];
+	self.fillOption = TLGradientViewActiveGradient;
 	
 	NSPoint mouseLocation = [self convertPoint:[event locationInWindow] fromView:nil];
-	if (NSMouseInRect(mouseLocation, [self bounds], [self isFlipped]))	
-		[self.disclosureButton sendAction:[self.disclosureButton action] to:[self.disclosureButton target]];	
-	[self setNeedsDisplay:YES];
+	if (NSMouseInRect(mouseLocation, [self bounds], [self isFlipped]))
+		[self.disclosureButton sendAction:[self.disclosureButton action] to:[self.disclosureButton target]];
 }
 
 - (void)mouseDragged:(NSEvent *)event;
 {
 	NSPoint mouseLocation = [self convertPoint:[event locationInWindow] fromView:nil];
 	if (NSMouseInRect(mouseLocation, [self bounds], [self isFlipped]))
-		self.activeFillGradient = [[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedWhite:0.83f alpha:1.0f],nil]] autorelease];
+		self.fillOption = TLGradientViewClickedGradient;
 	else
-		self.activeFillGradient = [[[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:[NSColor colorWithCalibratedWhite:0.916 alpha:1.0],[NSColor colorWithCalibratedWhite:0.814 alpha:1.0],nil]] autorelease];		
-	[self setNeedsDisplay:YES];
-	
-}
-
-- (void)rightMouseDown:(NSEvent *)event;
-{
-	[super rightMouseDown:event];
+		self.fillOption = TLGradientViewActiveGradient;
 }
 
 @end

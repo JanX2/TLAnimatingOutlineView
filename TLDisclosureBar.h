@@ -34,19 +34,20 @@
 @private
 	NSButton *_disclosureButton;
 	NSImageView *_imageViewLeft;
-	NSImageView *_imageViewRight;
 	NSTextField *_labelField;
 	NSView *_accessoryView;
 }
 @property(readonly,retain) NSImageView *imageViewLeft;
-@property(readonly,retain) NSImageView *imageViewRight;
 @property(readonly,retain) NSButton *disclosureButton;
 @property(readonly,retain) NSTextField *labelField;
-@property(readonly,retain) NSView *accessoryView;
+
+// Setting the accessory view will cause the removal of the current one from the view heirarchy. The new view will have its autoresizing mask amended with NSMinXMargin if it isn't set already.
+@property(readwrite,retain) NSView *accessoryView;
+@property(readwrite,assign) BOOL hasDisclosureButton;
 
 - (id)initWithFrame:(NSRect)frame expanded:(BOOL)expanded;
-- (id)initWithFrame:(NSRect)frame leftImage:(NSImage *)leftImage rightImage:(NSImage *)rightImage label:(NSString *)label expanded:(BOOL)expanded;
+- (id)initWithFrame:(NSRect)frame leftImage:(NSImage *)leftImage label:(NSString *)label expanded:(BOOL)expanded;
 - (void)setLeftImage:(NSImage *)image;
-- (void)setRightImage:(NSImage *)image;
 - (void)setLabel:(NSString *)label;
+- (NSString *)label;
 @end
