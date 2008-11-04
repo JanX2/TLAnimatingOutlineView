@@ -50,19 +50,24 @@ typedef NSUInteger TLCollapsibleViewAnimationType;
 @property(readonly,retain) TLDisclosureBar *disclosureBar;
 @property(readwrite,retain) NSView <TLCollapsibleDetailView> *detailView;
 @property(readonly) BOOL expanded;
-@property(readonly,assign) NSRect targetFrame;
 @property(readwrite,assign) BOOL animating;
+@property(readwrite,assign) BOOL hasDisclosureButton;
 
 // the following two dictionaries contain entries for the keys below.
 extern NSString *TLCollapsibleViewAnimationTypeKey; // an NSNumber TLCollapsibleViewAnimationType
 extern NSString *TLCollapsibleViewAnimationInfoKey; // an NSDictionary the animation info for the TLCollapsibleView
 extern NSString *TLCollapsibleViewDetailViewAnimationInfoKey; // an NSDictionary the animation info for the detailView
+
+// on calling -expandAnimationInfo and -collapseAnimationInfo, the detail view will receive a -canCollapse or canExpand message if the optional methods of the TLCollapsibleDetailView protocol are implemented. If these return NO, then -expandAnimationInfo and -collapseAnimationInfo return nil;
 @property(readonly) NSDictionary *expandAnimationInfo;
 @property(readonly) NSDictionary *collapseAnimationInfo;
 
 - (id)initWithFrame:(NSRect)frame detailView:(NSView <TLCollapsibleDetailView> *)detailView expanded:(BOOL)expanded;
 - (void)expand;
 - (void)collapse;
+
+// If the view is a subview of a TLCollapsibleOutlineView then the TLCollapsibleOutlineView will manage the animation and the animtion of any other subviews it has. If not then TLCollapsibleView istelf will animate.
+- (IBAction)toggleExpansionState:(id)sender;
 @end
 
 @protocol TLCollapsibleDetailView
@@ -74,3 +79,10 @@ extern NSString *TLCollapsibleViewDetailViewAnimationInfoKey; // an NSDictionary
 - (BOOL)canCollapse;
 - (BOOL)canExpand; // not likely a NO, but included for completeness.
 @end
+
+@protocol TLCollapsibleViewCollection
+- (void)view:(TLCollapsibleView *)collapsibleView willResizeWithFrame:(NSRect)frame;
+@end
+
+// this notification is sent only when the height of the detail view is changed such that the frame of the TLCollapsibleView needs to increase or decrease. Thus enabling the adjustment of subviews of the TLAnimatingOutlineView. Allowing the developer to alter the contents of the detail view at runtime. The userInfo dictionary contains the posting object under the @"NSObject" key.
+extern NSString *TLCollapsibleViewDetailViewDidChangeFrameNotification;
