@@ -87,6 +87,8 @@
 @end
 
 @protocol TLAnimatingOutlineViewDelegate
+@required
+- (CGFloat)rowSeparation;
 @optional
 - (BOOL)outlineView:(TLAnimatingOutlineView *)outlineView shouldExpandItem:(TLCollapsibleView *)item;
 - (BOOL)outlineView:(TLAnimatingOutlineView *)outlineView shouldCollapseItem:(TLCollapsibleView *)item;

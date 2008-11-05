@@ -67,8 +67,12 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 @implementation TLAnimatingOutlineView (Private)
 - (void)_updateDisclosureBarBorders;
 {
-	if ([[self subviews] count] <= 1)
+	if ([[self subviews] count] <= 1 || [self.delegate rowSeparation] > 0.0f)
 		return;
+	
+	if ([self.delegate rowSeparation] < 1.0 && [self numberOfRows] > 0)
+		[[[[self subviews] objectAtIndex:0] disclosureBar] setBorderSidesMask:TLMinYEdge];
+	
 	NSUInteger index = 1;
 	for (index ; index < [[self subviews] count] ; index ++) {
 		TLCollapsibleView *subview = [[self subviews] objectAtIndex:index];
@@ -83,9 +87,10 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 		return;
 	
 	NSRect newViewFrame = [self frame];
-	newViewFrame.size.height = 0.0f;
+	newViewFrame.size.height = ([self numberOfRows] > 0) ? 0.0f : [self.delegate rowSeparation];
+		
 	for (TLCollapsibleView *subview in [self subviews])
-		newViewFrame.size.height += NSHeight([subview frame]);
+		newViewFrame.size.height += NSHeight([subview frame]) + [self.delegate rowSeparation];
 	[self setFrame:newViewFrame];
 }
 
@@ -108,7 +113,7 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 	for (index ; index < [[self subviews] count] ; index++) {
 		NSView *subview = [[self subviews] objectAtIndex:index];
 		NSRect newSubviewFrame = [subview frame];
-		newSubviewFrame.origin.y = NSMaxY(newPrecedingViewFrame);
+		newSubviewFrame.origin.y = NSMaxY(newPrecedingViewFrame) + [self.delegate rowSeparation];
 		NSDictionary *subviewAnimationInfo = [NSDictionary dictionaryWithObjectsAndKeys:subview,NSViewAnimationTargetKey,[NSValue valueWithRect:[subview frame]],NSViewAnimationStartFrameKey,[NSValue valueWithRect:newSubviewFrame],NSViewAnimationEndFrameKey,nil];
 		[animationsForOtherSubviews addObject:subviewAnimationInfo];
 		newPrecedingViewFrame = newSubviewFrame;
@@ -174,9 +179,9 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 	for (NSView *view in [self subviews]) {
 		viewFrame = [view frame];
 		if (previousSubview != nil)
-			viewFrame.origin.y = NSMaxY([previousSubview frame]);
+			viewFrame.origin.y = NSMaxY([previousSubview frame]) + [self.delegate rowSeparation];
 		else // we're looking at the subview at index 0. This handles the case where subview at index 0 is removed.
-			viewFrame.origin.y = 0.0f;
+			viewFrame.origin.y = 0.0f + [self.delegate rowSeparation];
 		[view setFrame:viewFrame];
 		previousSubview = view;
 	}
@@ -282,7 +287,9 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 	NSRect collapsibleViewFrame = [self frame];
 	collapsibleViewFrame.size.height = NSHeight([detailView frame]); // the initialiser of TLCollapsibleView reserves the right to increase the height of the view to include the disclosure bar frame
 	if ([[self subviews] count] != 0)
-		collapsibleViewFrame.origin.y = NSMaxY([[[self subviews] lastObject] frame]);
+		collapsibleViewFrame.origin.y = NSMaxY([[[self subviews] lastObject] frame]) + [self.delegate rowSeparation];
+	else
+		collapsibleViewFrame.origin.y = [self.delegate rowSeparation];
 	
 	TLCollapsibleView *collapsibleView = [[[TLCollapsibleView alloc] initWithFrame:collapsibleViewFrame detailView:detailView expanded:expanded] autorelease];
 	[[collapsibleView disclosureBar] setLabel:label];
@@ -326,14 +333,11 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 	if (row >= [[self subviews] count])
 		return [self addView:detailView withImage:image label:label expanded:expanded];
 
-	if (row == 0)
-		row = 0;
-	
 	NSMutableArray *subviews = [self mutableArrayValueForKey:@"subviews"];
 	
 	NSRect collapsibleViewFrame = [self frame];
 	collapsibleViewFrame.size.height = NSHeight([detailView frame]);
-	collapsibleViewFrame.origin.y = NSMinY([[[self subviews] objectAtIndex:row] frame]);
+	collapsibleViewFrame.origin.y = NSMinY([[[self subviews] objectAtIndex:row] frame]) + [self.delegate rowSeparation];
 	TLCollapsibleView *collapsibleView = [[[TLCollapsibleView alloc] initWithFrame:collapsibleViewFrame detailView:detailView expanded:expanded] autorelease];
 	[[collapsibleView disclosureBar] setLabel:label];
 	[[collapsibleView disclosureBar] setLeftImage:image];

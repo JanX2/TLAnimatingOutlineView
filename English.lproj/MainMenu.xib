@@ -1106,7 +1106,7 @@
 			<object class="NSWindowTemplate" id="972006081">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{335, 297}, {553, 453}}</string>
+				<string key="NSWindowRect">{{335, 217}, {633, 533}}</string>
 				<int key="NSWTFlags">1946157056</int>
 				<string key="NSWindowTitle">Window</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -1130,14 +1130,13 @@
 										<object class="NSCustomView" id="723650726">
 											<reference key="NSNextResponder" ref="280823716"/>
 											<int key="NSvFlags">274</int>
-											<string key="NSFrameSize">{555, 455}</string>
+											<string key="NSFrameSize">{633, 533}</string>
 											<reference key="NSSuperview" ref="280823716"/>
 											<string key="NSClassName">NSView</string>
 										</object>
 									</object>
-									<string key="NSFrameSize">{555, 455}</string>
+									<string key="NSFrameSize">{633, 533}</string>
 									<reference key="NSSuperview" ref="852771908"/>
-									<reference key="NSNextKeyView" ref="723650726"/>
 									<reference key="NSDocView" ref="723650726"/>
 									<object class="NSColor" key="NSBGColor" id="459446433">
 										<int key="NSColorSpace">6</int>
@@ -1171,16 +1170,15 @@
 									<double key="NSPercent">5.060241e-01</double>
 								</object>
 							</object>
-							<string key="NSFrame">{{-1, -1}, {555, 455}}</string>
+							<string key="NSFrameSize">{633, 533}</string>
 							<reference key="NSSuperview" ref="439893737"/>
-							<reference key="NSNextKeyView" ref="280823716"/>
 							<int key="NSsFlags">528</int>
 							<reference key="NSVScroller" ref="28145615"/>
 							<reference key="NSHScroller" ref="670307827"/>
 							<reference key="NSContentView" ref="280823716"/>
 						</object>
 					</object>
-					<string key="NSFrameSize">{553, 453}</string>
+					<string key="NSFrameSize">{633, 533}</string>
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
@@ -44642,9 +44640,9 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{27, 372}, {553, 453}}</string>
+					<string>{{27, 292}, {633, 533}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{27, 372}, {553, 453}}</string>
+					<string>{{27, 292}, {633, 533}}</string>
 					<reference ref="9"/>
 					<string>{{33, 99}, {480, 360}}</string>
 					<string>{3.40282e+38, 3.40282e+38}</string>
