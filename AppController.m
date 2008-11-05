@@ -40,6 +40,7 @@
 {
 	NSSize contentSize = [_scrollView contentSize];
 	TLAnimatingOutlineView *outlineView = [[[TLAnimatingOutlineView alloc] initWithFrame:NSMakeRect(0.0f, 0.0f, contentSize.width, contentSize.height)] autorelease];
+	[outlineView setDelegate:self];
 	[outlineView setAutoresizingMask:NSViewWidthSizable]; // should not be combined with NSviewHieghtSizable else we have incorrect scrollbar showing/hiding/sizing behaviour.
 	[_scrollView setDocumentView:outlineView];
 	
@@ -91,5 +92,10 @@
 	[outlineView addView:customView withImage:nil label:@"added" expanded:NO animate:NO];
 	
 	[self performSelector:@selector(frameTest) withObject:nil afterDelay:4.0f];
+}
+
+- (CGFloat)rowSeparation;
+{
+	return 1.0f;
 }
 @end
