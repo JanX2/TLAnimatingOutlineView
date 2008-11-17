@@ -46,7 +46,7 @@
 	
 	id view = [outlineView addView:_detailView1 withImage:[NSImage imageNamed:NSImageNameQuickLookTemplate] label:[NSString stringWithString:@"First View"]  expanded:YES];
 	TLGradientView *accessoryView = [[[TLGradientView alloc] initWithFrame:NSMakeRect(0.0, 0, 40, 18)] autorelease];
-	[[view disclosureBar] setAccessoryView:accessoryView];
+//	[[view disclosureBar] setAccessoryView:accessoryView];
 	
 	view = [outlineView addView:_detailView2 withImage:[NSImage imageNamed:NSImageNameInfo] label:[NSString stringWithString:@"Next View"]  expanded:YES];
 	
