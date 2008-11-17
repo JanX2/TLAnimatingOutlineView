@@ -182,10 +182,10 @@ NSString *TLCollapsibleViewDetailViewAnimationInfoKey = @"TLCollapsibleViewDetai
 - (void)dealloc;
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[self.disclosureBar release];
-	[self.detailView release];
-	[self.expandAnimation release];
-	[self.collapseAnimation release];
+	[_disclosureBar release];
+	[_detailView release];
+	[_expandAnimation release];
+	[_collapseAnimation release];
 	[super dealloc];
 }
 

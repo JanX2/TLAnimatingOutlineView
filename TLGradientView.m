@@ -52,9 +52,21 @@
 @synthesize fillAngle = _fillAngle;
 @synthesize drawsHighlight = _drawsHighlight;
 @synthesize highlightColor = _highlightColor;
+@synthesize clickedHighlightColor = _clickedHighLightColor;
 @synthesize drawsBorder = _drawsBorder;
 @synthesize borderColor = _borderColor;
 @synthesize borderSidesMask = _borderSidesMask;
+
+- (id)init;
+{
+	if (![super init])
+		return nil;
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidBecomeActiveNotification object:NSApp];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidResignActiveNotification object:NSApp];
+	
+	return self;
+}
 
 - (id)initWithFrame:(NSRect)frame;
 {
@@ -71,6 +83,7 @@
 	self.borderSidesMask = (TLMinXEdge|TLMaxXEdge|TLMinYEdge|TLMaxYEdge);
 	
 	self.highlightColor = [NSColor colorWithCalibratedWhite:0.97f alpha:1.0f];
+	self.clickedHighlightColor = [NSColor colorWithCalibratedWhite:0.85f alpha:1.0f];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidBecomeActiveNotification object:NSApp];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidResignActiveNotification object:NSApp];
@@ -102,11 +115,11 @@
 - (void)dealloc;
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[self.activeFillGradient release];
-	[self.inactiveFillGradient release];
-	[self.clickedFillGradient release];
-	[self.borderColor release];
-	[self.highlightColor release];
+	[_activeFillGradient release];
+	[_inactiveFillGradient release];
+	[_clickedFillGradient release];
+	[_borderColor release];
+	[_highlightColor release];
 	[super dealloc];
 }
 
@@ -115,6 +128,9 @@
 	[super viewWillMoveToSuperview:superview];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidResignKeyNotification object:[self window]];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:[self window]];
+	
+	if (!superview) return;
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(display) name:NSWindowDidResignKeyNotification object:[superview window]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(display) name:NSWindowDidBecomeKeyNotification object:[superview window]];
 }
@@ -215,7 +231,7 @@
 	}
 	
 	if (self.drawsHighlight) {
-		[self.highlightColor setStroke];
+		[self.fillOption != TLGradientViewClickedGradient ? self.highlightColor : self.clickedHighlightColor setStroke];
 		[[NSBezierPath bezierPathWithRect:NSMakeRect(NSMinX([self bounds]), [self isFlipped] ? NSMinY([self bounds]) + (self.borderSidesMask & TLMinYEdge ? 1.5f : 0.5f) : NSMaxY([self bounds]) - (self.borderSidesMask & TLMaxYEdge ? 1.5f : 0.5f), NSWidth([self bounds]), 0.0f)] stroke];
 	}
 }

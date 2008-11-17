@@ -193,10 +193,10 @@
 
 - (void)dealloc;
 {
-	[self.disclosureButton release];
-	[self.imageViewLeft release];
-	[self.accessoryView release];
-	[self.labelField release];
+	[_disclosureButton release];
+	[_imageViewLeft release];
+	[_accessoryView release];
+	[_labelField release];
 	[super dealloc];
 }
 
@@ -283,6 +283,12 @@
 		self.fillOption = TLGradientViewClickedGradient;
 	else
 		self.fillOption = TLGradientViewActiveGradient;
+}
+
+- (void)drawRect:(NSRect)rect;
+{
+//	[[self.labelField cell] setBackgroundStyle:NSBackgroundStyleRaised];
+	[super drawRect:rect];
 }
 
 @end

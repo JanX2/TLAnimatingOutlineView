@@ -238,10 +238,10 @@ NSString *TLAnimatingOutlineViewItemDidCollapseNotification = @"TLAnimatingOutli
 	[self _removeDelegateAsObserver];
 	for (NSView *subview in [self subviews])
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:TLCollapsibleViewDetailViewDidChangeFrameNotification object:subview];
-	[self.insertionAnimation release];
-	[self.removalAnimation release];
-	[self.expandAnimation release];
-	[self.collapseAnimation release];
+	[_insertionAnimation release];
+	[_removalAnimation release];
+	[_expandAnimation release];
+	[_collapseAnimation release];
 	[super dealloc];
 }
 
