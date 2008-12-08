@@ -30,7 +30,7 @@
 // If you use it, acknowledgement in an About Page or other appropriate place would be nice.
 // For example, "Contains code from "TLAnimatingOutlineView" by Jonathan Dann http://code.google.com/p/tlanimatingoutlineview/" will // do.
 
-#import "TLGradientView.h"
+#import "Espresso/TLGradientView.h"
 
 @interface TLGradientView ()
 
@@ -52,7 +52,6 @@
 @synthesize fillAngle = _fillAngle;
 @synthesize drawsHighlight = _drawsHighlight;
 @synthesize highlightColor = _highlightColor;
-@synthesize clickedHighlightColor = _clickedHighLightColor;
 @synthesize drawsBorder = _drawsBorder;
 @synthesize borderColor = _borderColor;
 @synthesize borderSidesMask = _borderSidesMask;
@@ -83,10 +82,6 @@
 	self.borderSidesMask = (TLMinXEdge|TLMaxXEdge|TLMinYEdge|TLMaxYEdge);
 	
 	self.highlightColor = [NSColor colorWithCalibratedWhite:0.97f alpha:1.0f];
-	self.clickedHighlightColor = [NSColor colorWithCalibratedWhite:0.85f alpha:1.0f];
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidBecomeActiveNotification object:NSApp];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidResignActiveNotification object:NSApp];
 	
     return self;
 }
@@ -145,8 +140,9 @@
 {
 	if (_clickedFillGradient == gradient)
 		return;
+	[gradient retain];
 	[_clickedFillGradient release];
-	_clickedFillGradient = [gradient copy];
+	_clickedFillGradient = gradient;
 	[self setNeedsDisplay:YES];
 }
 
@@ -154,8 +150,9 @@
 {
 	if (_activeFillGradient == gradient)
 		return;
+	[gradient retain];
 	[_activeFillGradient release];
-	_activeFillGradient = [gradient copy];
+	_activeFillGradient = gradient;
 	[self setNeedsDisplay:YES];
 }
 
@@ -163,8 +160,9 @@
 {
 	if (_inactiveFillGradient == gradient)
 		return;
+	[gradient retain];	
 	[_inactiveFillGradient release];
-	_inactiveFillGradient = [gradient copy];
+	_inactiveFillGradient = gradient;
 	[self setNeedsDisplay:YES];
 }
 
@@ -198,10 +196,11 @@
 
 - (void)setBorderColor:(NSColor *)color;
 {
-	if (_borderColor = color)
+	if (_borderColor == color)
 		return;
+	[color retain];	
 	[_borderColor release];
-	_borderColor = [color copy];
+	_borderColor = color;
 	[self setNeedsDisplay:YES];
 }
 
@@ -231,7 +230,7 @@
 	}
 	
 	if (self.drawsHighlight) {
-		[self.fillOption != TLGradientViewClickedGradient ? self.highlightColor : self.clickedHighlightColor setStroke];
+		[self.highlightColor setStroke];
 		[[NSBezierPath bezierPathWithRect:NSMakeRect(NSMinX([self bounds]), [self isFlipped] ? NSMinY([self bounds]) + (self.borderSidesMask & TLMinYEdge ? 1.5f : 0.5f) : NSMaxY([self bounds]) - (self.borderSidesMask & TLMaxYEdge ? 1.5f : 0.5f), NSWidth([self bounds]), 0.0f)] stroke];
 	}
 }
