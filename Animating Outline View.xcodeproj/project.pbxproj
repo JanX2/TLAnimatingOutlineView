@@ -10,13 +10,13 @@
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
-		AB5E07840EAE0DE100176558 /* TLCollapsibleView.m in Sources */ = {isa = PBXBuildFile; fileRef = AB5E07830EAE0DE100176558 /* TLCollapsibleView.m */; };
-		AB5E07C50EAE1F0E00176558 /* TLAnimatingOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = AB5E07C40EAE1F0E00176558 /* TLAnimatingOutlineView.m */; };
 		ABB5FD4A0EBDF54200E7AA11 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABB5FD490EBDF54200E7AA11 /* Cocoa.framework */; };
-		ABC9150F0EACA7BB0003DDDB /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC9150E0EACA7BB0003DDDB /* AppController.m */; };
-		ABC915200EACB01B0003DDDB /* TLGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC9151F0EACB01B0003DDDB /* TLGradientView.m */; };
-		ABC915410EACEF830003DDDB /* TLDisclosureBar.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC915400EACEF830003DDDB /* TLDisclosureBar.m */; };
-		ABCB94D70EB1376E00205467 /* TLEmbossedTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ABCB94D60EB1376E00205467 /* TLEmbossedTextFieldCell.m */; };
+		ABBD951D0F2211D100F77CBF /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBD951B0F2211D100F77CBF /* AppController.m */; };
+		ABBD952A0F2211DB00F77CBF /* TLAnimatingOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBD95200F2211DB00F77CBF /* TLAnimatingOutlineView.m */; };
+		ABBD952B0F2211DB00F77CBF /* TLCollapsibleView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBD95220F2211DB00F77CBF /* TLCollapsibleView.m */; };
+		ABBD952C0F2211DB00F77CBF /* TLDisclosureBar.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBD95240F2211DB00F77CBF /* TLDisclosureBar.m */; };
+		ABBD952D0F2211DB00F77CBF /* TLEmbossedTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBD95260F2211DB00F77CBF /* TLEmbossedTextFieldCell.m */; };
+		ABBD952E0F2211DB00F77CBF /* TLGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBD95290F2211DB00F77CBF /* TLGradientView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,20 +29,20 @@
 		32CA4F630368D1EE00C91783 /* Animating Outline View_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Animating Outline View_Prefix.pch"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Animating Outline View.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Animating Outline View.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AB1449E40EB22509005F5C42 /* TLGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLGeometry.h; sourceTree = "<group>"; };
-		AB5E07820EAE0DE100176558 /* TLCollapsibleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLCollapsibleView.h; sourceTree = "<group>"; };
-		AB5E07830EAE0DE100176558 /* TLCollapsibleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLCollapsibleView.m; sourceTree = "<group>"; };
-		AB5E07C30EAE1F0E00176558 /* TLAnimatingOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLAnimatingOutlineView.h; sourceTree = "<group>"; };
-		AB5E07C40EAE1F0E00176558 /* TLAnimatingOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLAnimatingOutlineView.m; sourceTree = "<group>"; };
 		ABB5FD490EBDF54200E7AA11 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		ABC9150D0EACA7BB0003DDDB /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
-		ABC9150E0EACA7BB0003DDDB /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
-		ABC9151E0EACB01B0003DDDB /* TLGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLGradientView.h; sourceTree = "<group>"; };
-		ABC9151F0EACB01B0003DDDB /* TLGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLGradientView.m; sourceTree = "<group>"; };
-		ABC9153F0EACEF830003DDDB /* TLDisclosureBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLDisclosureBar.h; sourceTree = "<group>"; };
-		ABC915400EACEF830003DDDB /* TLDisclosureBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLDisclosureBar.m; sourceTree = "<group>"; };
-		ABCB94D50EB1376E00205467 /* TLEmbossedTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLEmbossedTextFieldCell.h; sourceTree = "<group>"; };
-		ABCB94D60EB1376E00205467 /* TLEmbossedTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLEmbossedTextFieldCell.m; sourceTree = "<group>"; };
+		ABBD951B0F2211D100F77CBF /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppController.m; path = "Example Application/AppController.m"; sourceTree = "<group>"; };
+		ABBD951C0F2211D100F77CBF /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppController.h; path = "Example Application/AppController.h"; sourceTree = "<group>"; };
+		ABBD951F0F2211DB00F77CBF /* TLAnimatingOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLAnimatingOutlineView.h; sourceTree = "<group>"; };
+		ABBD95200F2211DB00F77CBF /* TLAnimatingOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLAnimatingOutlineView.m; sourceTree = "<group>"; };
+		ABBD95210F2211DB00F77CBF /* TLCollapsibleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLCollapsibleView.h; sourceTree = "<group>"; };
+		ABBD95220F2211DB00F77CBF /* TLCollapsibleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLCollapsibleView.m; sourceTree = "<group>"; };
+		ABBD95230F2211DB00F77CBF /* TLDisclosureBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLDisclosureBar.h; sourceTree = "<group>"; };
+		ABBD95240F2211DB00F77CBF /* TLDisclosureBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLDisclosureBar.m; sourceTree = "<group>"; };
+		ABBD95250F2211DB00F77CBF /* TLEmbossedTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLEmbossedTextFieldCell.h; sourceTree = "<group>"; };
+		ABBD95260F2211DB00F77CBF /* TLEmbossedTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLEmbossedTextFieldCell.m; sourceTree = "<group>"; };
+		ABBD95270F2211DB00F77CBF /* TLGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLGeometry.h; sourceTree = "<group>"; };
+		ABBD95280F2211DB00F77CBF /* TLGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLGradientView.h; sourceTree = "<group>"; };
+		ABBD95290F2211DB00F77CBF /* TLGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLGradientView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,26 +57,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		080E96DDFE201D6D7F000001 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				AB1449E40EB22509005F5C42 /* TLGeometry.h */,
-				ABC9151E0EACB01B0003DDDB /* TLGradientView.h */,
-				ABC9151F0EACB01B0003DDDB /* TLGradientView.m */,
-				ABCB94D50EB1376E00205467 /* TLEmbossedTextFieldCell.h */,
-				ABCB94D60EB1376E00205467 /* TLEmbossedTextFieldCell.m */,
-				ABC9153F0EACEF830003DDDB /* TLDisclosureBar.h */,
-				ABC915400EACEF830003DDDB /* TLDisclosureBar.m */,
-				AB5E07820EAE0DE100176558 /* TLCollapsibleView.h */,
-				AB5E07830EAE0DE100176558 /* TLCollapsibleView.m */,
-				AB5E07C30EAE1F0E00176558 /* TLAnimatingOutlineView.h */,
-				AB5E07C40EAE1F0E00176558 /* TLAnimatingOutlineView.m */,
-				ABC9150D0EACA7BB0003DDDB /* AppController.h */,
-				ABC9150E0EACA7BB0003DDDB /* AppController.m */,
-			);
-			name = Classes;
-			sourceTree = "<group>";
-		};
 		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -98,8 +78,8 @@
 		29B97314FDCFA39411CA2CEA /* Animating Outline View */ = {
 			isa = PBXGroup;
 			children = (
-				080E96DDFE201D6D7F000001 /* Classes */,
-				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				ABBD951E0F2211DB00F77CBF /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Example Application */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
@@ -107,13 +87,15 @@
 			name = "Animating Outline View";
 			sourceTree = "<group>";
 		};
-		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+		29B97315FDCFA39411CA2CEA /* Example Application */ = {
 			isa = PBXGroup;
 			children = (
+				ABBD951B0F2211D100F77CBF /* AppController.m */,
+				ABBD951C0F2211D100F77CBF /* AppController.h */,
 				32CA4F630368D1EE00C91783 /* Animating Outline View_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
-			name = "Other Sources";
+			name = "Example Application";
 			sourceTree = "<group>";
 		};
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
@@ -141,6 +123,24 @@
 				ABB5FD490EBDF54200E7AA11 /* Cocoa.framework */,
 			);
 			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		ABBD951E0F2211DB00F77CBF /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				ABBD951F0F2211DB00F77CBF /* TLAnimatingOutlineView.h */,
+				ABBD95200F2211DB00F77CBF /* TLAnimatingOutlineView.m */,
+				ABBD95210F2211DB00F77CBF /* TLCollapsibleView.h */,
+				ABBD95220F2211DB00F77CBF /* TLCollapsibleView.m */,
+				ABBD95230F2211DB00F77CBF /* TLDisclosureBar.h */,
+				ABBD95240F2211DB00F77CBF /* TLDisclosureBar.m */,
+				ABBD95250F2211DB00F77CBF /* TLEmbossedTextFieldCell.h */,
+				ABBD95260F2211DB00F77CBF /* TLEmbossedTextFieldCell.m */,
+				ABBD95270F2211DB00F77CBF /* TLGeometry.h */,
+				ABBD95280F2211DB00F77CBF /* TLGradientView.h */,
+				ABBD95290F2211DB00F77CBF /* TLGradientView.m */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,12 +199,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
-				ABC9150F0EACA7BB0003DDDB /* AppController.m in Sources */,
-				ABC915200EACB01B0003DDDB /* TLGradientView.m in Sources */,
-				ABC915410EACEF830003DDDB /* TLDisclosureBar.m in Sources */,
-				AB5E07840EAE0DE100176558 /* TLCollapsibleView.m in Sources */,
-				AB5E07C50EAE1F0E00176558 /* TLAnimatingOutlineView.m in Sources */,
-				ABCB94D70EB1376E00205467 /* TLEmbossedTextFieldCell.m in Sources */,
+				ABBD951D0F2211D100F77CBF /* AppController.m in Sources */,
+				ABBD952A0F2211DB00F77CBF /* TLAnimatingOutlineView.m in Sources */,
+				ABBD952B0F2211DB00F77CBF /* TLCollapsibleView.m in Sources */,
+				ABBD952C0F2211DB00F77CBF /* TLDisclosureBar.m in Sources */,
+				ABBD952D0F2211DB00F77CBF /* TLEmbossedTextFieldCell.m in Sources */,
+				ABBD952E0F2211DB00F77CBF /* TLGradientView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
