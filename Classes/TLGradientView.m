@@ -28,9 +28,11 @@
 //	OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // If you use it, acknowledgement in an About Page or other appropriate place would be nice.
-// For example, "Contains code from "TLAnimatingOutlineView" by Jonathan Dann http://code.google.com/p/tlanimatingoutlineview/" will // do.
+// For example, "Contains code from "TLAnimatingOutlineView" by Jonathan Dann http://code.google.com/p/tlanimatingoutlineview/" will do.
 
-#import "Espresso/TLGradientView.h"
+#import "TLGradientView.h"
+
+
 
 @interface TLGradientView ()
 
@@ -52,6 +54,7 @@
 @synthesize fillAngle = _fillAngle;
 @synthesize drawsHighlight = _drawsHighlight;
 @synthesize highlightColor = _highlightColor;
+@synthesize clickedHighlightColor = _clickedHighLightColor;
 @synthesize drawsBorder = _drawsBorder;
 @synthesize borderColor = _borderColor;
 @synthesize borderSidesMask = _borderSidesMask;

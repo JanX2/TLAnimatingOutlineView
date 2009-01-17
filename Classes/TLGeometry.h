@@ -1,5 +1,5 @@
 //
-//  TLDisclosureBar.h
+//  TLGeometry.h
 //  Created by Jonathan Dann and on 20/10/2008.
 //	Copyright (c) 2008, espresso served here.
 //	All rights reserved.
@@ -28,29 +28,13 @@
 //	OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // If you use it, acknowledgement in an About Page or other appropriate place would be nice.
-// For example, "Contains code from "TLAnimatingOutlineView" by Jonathan Dann http://code.google.com/p/tlanimatingoutlineview/" will // do.
+// For example, "Contains code from "TLAnimatingOutlineView" by Jonathan Dann http://code.google.com/p/tlanimatingoutlineview/" will do.
 
-#import <Cocoa/Cocoa.h>
-#import "TLGradientView.h"
-
-@interface TLDisclosureBar : TLGradientView <NSCoding>{
-@private
-	NSButton *_disclosureButton;
-	NSImageView *_imageViewLeft;
-	NSTextField *_labelField;
-	NSView *_accessoryView;
-}
-@property(readonly,retain) NSImageView *imageViewLeft;
-@property(readonly,retain) NSButton *disclosureButton;
-@property(readonly,retain) NSTextField *labelField;
-
-// Setting the accessory view will cause the removal of the current one from the view heirarchy. The new view will have its autoresizing mask amended with NSMinXMargin if it isn't set already.
-@property(readwrite,retain) NSView *accessoryView;
-@property(readwrite,assign) BOOL hasDisclosureButton;
-
-- (id)initWithFrame:(NSRect)frame expanded:(BOOL)expanded;
-- (id)initWithFrame:(NSRect)frame leftImage:(NSImage *)leftImage label:(NSString *)label expanded:(BOOL)expanded;
-- (void)setLeftImage:(NSImage *)image;
-- (void)setLabel:(NSString *)label;
-- (NSString *)label;
-@end
+// the NS-versions are deprecated in 64-bit. CG-version is 64-bit but can't create a unique mask from all combnations.
+enum {
+	TLMinXEdge = 1 << 0,
+	TLMaxXEdge = 1 << 1,
+	TLMinYEdge = 1 << 2,
+	TLMaxYEdge = 1 << 3
+};
+typedef NSUInteger TLRectEdge;

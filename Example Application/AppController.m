@@ -28,7 +28,7 @@
 //	OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // If you use it, acknowledgement in an About Page or other appropriate place would be nice.
-// For example, "Contains code from "TLAnimatingOutlineView" by Jonathan Dann http://code.google.com/p/tlanimatingoutlineview/" will // do.
+// For example, "Contains code from "TLAnimatingOutlineView" by Jonathan Dann http://code.google.com/p/tlanimatingoutlineview/" will do.
 
 #import "AppController.h"
 #import "TLAnimatingOutlineView.h"
@@ -45,7 +45,7 @@
 	[_scrollView setDocumentView:outlineView];
 	
 	id view = [outlineView addView:_detailView1 withImage:[NSImage imageNamed:NSImageNameQuickLookTemplate] label:[NSString stringWithString:@"First View"]  expanded:YES];
-	TLGradientView *accessoryView = [[[TLGradientView alloc] initWithFrame:NSMakeRect(0.0, 0, 40, 18)] autorelease];
+//	TLGradientView *accessoryView = [[[TLGradientView alloc] initWithFrame:NSMakeRect(0.0, 0, 40, 18)] autorelease];
 //	[[view disclosureBar] setAccessoryView:accessoryView];
 	
 	view = [outlineView addView:_detailView2 withImage:[NSImage imageNamed:NSImageNameInfo] label:[NSString stringWithString:@"Next View"]  expanded:YES];

@@ -1,5 +1,5 @@
 //
-//  TLGeometry.h
+//  TLEmbossedTextFieldCell.h
 //  Created by Jonathan Dann and on 20/10/2008.
 //	Copyright (c) 2008, espresso served here.
 //	All rights reserved.
@@ -28,13 +28,14 @@
 //	OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // If you use it, acknowledgement in an About Page or other appropriate place would be nice.
-// For example, "Contains code from "TLAnimatingOutlineView" by Jonathan Dann http://code.google.com/p/tlanimatingoutlineview/" will // do.
+// For example, "Contains code from "TLAnimatingOutlineView" by Jonathan Dann http://code.google.com/p/tlanimatingoutlineview/" will do.
 
-// the NS-versions are deprecated in 64-bit. CG-version is 64-bit but can't create a unique mask from all combnations.
-enum {
-	TLMinXEdge = 1 << 0,
-	TLMaxXEdge = 1 << 1,
-	TLMinYEdge = 1 << 2,
-	TLMaxYEdge = 1 << 3
-};
-typedef NSUInteger TLRectEdge;
+#import <Cocoa/Cocoa.h>
+
+
+@interface TLEmbossedTextFieldCell : NSTextFieldCell {
+@private
+	
+}
+
+@end
