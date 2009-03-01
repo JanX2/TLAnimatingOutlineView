@@ -30,16 +30,16 @@
 // If you use it, acknowledgement in an About Page or other appropriate place would be nice.
 // For example, "Contains code from "TLAnimatingOutlineView" by Jonathan Dann http://code.google.com/p/tlanimatingoutlineview/" will do.
 
-#import <Cocoa/Cocoa.h>
 #import "TLGradientView.h"
 
 @interface TLDisclosureBar : TLGradientView <NSCoding>{
-@private
+ @private
 	NSButton *_disclosureButton;
 	NSImageView *_imageViewLeft;
 	NSTextField *_labelField;
 	NSView *_accessoryView;
 }
+
 @property(readonly,retain) NSImageView *imageViewLeft;
 @property(readonly,retain) NSButton *disclosureButton;
 @property(readonly,retain) NSTextField *labelField;
@@ -53,4 +53,5 @@
 - (void)setLeftImage:(NSImage *)image;
 - (void)setLabel:(NSString *)label;
 - (NSString *)label;
+
 @end

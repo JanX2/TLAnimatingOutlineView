@@ -31,7 +31,7 @@
 // For example, "Contains code from "TLAnimatingOutlineView" by Jonathan Dann http://code.google.com/p/tlanimatingoutlineview/" will do.
 
 #import "TLDisclosureBar.h"
-#import "TLEmbossedTextFieldCell.h"
+
 #import "TLCollapsibleView.h"
 
 #define TL_DISCLOSURE_BAR_SUBVIEW_SPACING 6.0f
@@ -128,7 +128,7 @@
 	[self.disclosureButton setFocusRingType:NSFocusRingTypeNone];
 	[self.disclosureButton setState:expanded ? NSOnState : NSOffState];
 	[self addSubview:self.disclosureButton];
-		
+	
 	NSRect imageViewLeftFrame = disclosureFrame;
 	imageViewLeftFrame.origin.x = NSMaxX(imageViewLeftFrame) + TL_DISCLOSURE_BAR_SUBVIEW_SPACING;
 	imageViewLeftFrame.size.width = NSHeight(imageViewLeftFrame);
@@ -150,7 +150,7 @@
 	[self.labelField setBezeled:NO];
 	[self.labelField setDrawsBackground:NO];
 	[self.labelField setTextColor:[NSColor blackColor]];
-	[self.labelField setCell:[[[TLEmbossedTextFieldCell alloc] initTextCell:@""] autorelease]];
+	[[self.labelField cell] setBackgroundStyle:NSBackgroundStyleRaised];
 	[[self.labelField cell] setControlSize:NSSmallControlSize];
 	[[self.labelField cell] setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:[[self.labelField cell] controlSize]]]];
 	[[self.labelField cell] setWraps:NO];
@@ -283,12 +283,6 @@
 		self.fillOption = TLGradientViewClickedGradient;
 	else
 		self.fillOption = TLGradientViewActiveGradient;
-}
-
-- (void)drawRect:(NSRect)rect;
-{
-//	[[self.labelField cell] setBackgroundStyle:NSBackgroundStyleRaised];
-	[super drawRect:rect];
 }
 
 @end
